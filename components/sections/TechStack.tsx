@@ -1,6 +1,7 @@
 "use client";
 import type { TechSignals } from "@/types/company";
 import Tooltip from "@/components/Tooltip";
+import Citation from "@/components/Citation";
 
 export default function TechStackSection({ data }: { data: TechSignals }) {
   if (
@@ -23,6 +24,7 @@ export default function TechStackSection({ data }: { data: TechSignals }) {
             <div className="text-xs text-gray-400 uppercase tracking-wider mb-2 flex items-center">
               Detected on Website
               <Tooltip text="Technologies and platforms identified by scanning the company's public website source code — cloud providers, CRM, ERP, analytics, and marketing tools." />
+              <Citation source="Direct scan of company website" />
             </div>
             <div className="flex flex-wrap gap-2">
               {data.detectedTech.map((t) => (
@@ -38,6 +40,7 @@ export default function TechStackSection({ data }: { data: TechSignals }) {
             <div className="text-xs text-gray-400 uppercase tracking-wider mb-2 flex items-center">
               Filing Keywords
               <Tooltip text="Digital manufacturing terms found in the company's most recent SEC 10-K annual report. These signal how digitally mature the company is and what technologies they're already discussing internally." />
+              <Citation source="SEC EDGAR 10-K Annual Report" />
             </div>
             <div className="flex flex-wrap gap-2">
               {data.digitalKeywords.map((k) => (
@@ -53,6 +56,7 @@ export default function TechStackSection({ data }: { data: TechSignals }) {
             <div className="text-xs text-gray-400 uppercase tracking-wider mb-2 flex items-center">
               Competitor Software
               <Tooltip text="PLM, CAD, or engineering software platforms mentioned in SEC filings that compete directly with Siemens DIS products. These indicate existing tooling that would need to be displaced or integrated." />
+              <Citation source="SEC EDGAR 10-K Annual Report" />
             </div>
             <div className="flex flex-wrap gap-2">
               {data.competitorSoftware.map((c) => (

@@ -1,6 +1,7 @@
 "use client";
 import type { OpportunityScore, RedFlag, Opportunity } from "@/types/company";
 import Tooltip from "@/components/Tooltip";
+import Citation from "@/components/Citation";
 
 function ScoreRing({ score }: { score: number }) {
   const color = score >= 70 ? "#22c55e" : score >= 45 ? "#f59e0b" : "#ef4444";
@@ -34,11 +35,13 @@ function ScoreRing({ score }: { score: number }) {
 function ScoreBar({
   label,
   tooltip,
+  source,
   value,
   max = 25,
 }: {
   label: string;
   tooltip: string;
+  source: string;
   value: number;
   max?: number;
 }) {
@@ -49,6 +52,7 @@ function ScoreBar({
         <span className="flex items-center">
           {label}
           <Tooltip text={tooltip} />
+          <Citation source={source} />
         </span>
         <span>{value}/{max}</span>
       </div>
@@ -76,6 +80,7 @@ export default function OpportunityScoreSection({
           <span className="w-2 h-2 rounded-full bg-[#00BEDC]" />
           DIS Opportunity Score
           <Tooltip text="A 0–100 score estimating how strong a Siemens Digital Industries Software sales opportunity this company represents. Based on industry alignment, R&D investment, digital transformation signals, and financial health." />
+          <Citation source="Computed from Yahoo Finance, SEC EDGAR & website scan" />
         </h3>
         <div className="flex justify-center mb-6 mt-4">
           <ScoreRing score={score.total} />
@@ -84,21 +89,25 @@ export default function OpportunityScoreSection({
           <ScoreBar
             label="Industry Fit"
             tooltip="How well the company's industry aligns with Siemens DIS core markets: aerospace, automotive, defense, electronics, industrial machinery, medical devices, and energy."
+            source="Yahoo Finance (industry classification)"
             value={score.industryFit}
           />
           <ScoreBar
             label="R&D Intensity"
             tooltip="R&D spend as a percentage of revenue. Companies investing heavily in R&D have complex engineering workflows — the primary use case for PLM, simulation, and CAD tools."
+            source="Yahoo Finance / SEC EDGAR XBRL"
             value={score.rdIntensity}
           />
           <ScoreBar
             label="Digital Maturity"
             tooltip="Based on how many digital manufacturing keywords (e.g. digital twin, MES, PLM, CAD, Industry 4.0) appear in the company's SEC annual filing. More signals = more digital awareness."
+            source="SEC EDGAR 10-K Annual Report"
             value={score.digitalMaturity}
           />
           <ScoreBar
             label="Financial Health"
             tooltip="A composite of revenue growth and operating margin. Healthy, growing companies are more likely to invest in new software — declining or deeply unprofitable companies are higher-risk deals."
+            source="Yahoo Finance / SEC EDGAR"
             value={score.financialHealth}
           />
         </div>

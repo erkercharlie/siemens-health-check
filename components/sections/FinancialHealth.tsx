@@ -1,6 +1,7 @@
 "use client";
 import type { Financials } from "@/types/company";
 import Tooltip from "@/components/Tooltip";
+import Citation from "@/components/Citation";
 
 function fmt(n: number | null, type: "currency" | "percent" | "number" = "number"): string {
   if (n === null) return "N/A";
@@ -17,12 +18,14 @@ function fmt(n: number | null, type: "currency" | "percent" | "number" = "number
 function MetricTile({
   label,
   tooltip,
+  source,
   value,
   sub,
   highlight,
 }: {
   label: string;
   tooltip?: string;
+  source?: string;
   value: string;
   sub?: string;
   highlight?: "good" | "bad" | "neutral";
@@ -33,6 +36,7 @@ function MetricTile({
       <div className="text-xs text-gray-400 uppercase tracking-wider mb-1 flex items-center">
         {label}
         {tooltip && <Tooltip text={tooltip} />}
+        {source && <Citation source={source} />}
       </div>
       <div className={`text-xl font-bold ${highlight ? colors[highlight] : "text-white"}`}>
         {value}
@@ -75,11 +79,13 @@ export default function FinancialHealth({ data }: { data: Financials }) {
         <MetricTile
           label="Market Cap"
           tooltip="Total market value of all outstanding shares. Larger companies generally have larger software budgets."
+          source="Yahoo Finance"
           value={fmt(data.marketCap, "currency")}
         />
         <MetricTile
           label="Revenue (TTM)"
           tooltip="Trailing Twelve Months — the most recent 12 months of total revenue. YoY = year-over-year growth compared to the same period last year."
+          source="Yahoo Finance / SEC EDGAR"
           value={fmt(data.revenue, "currency")}
           sub={
             data.revenueGrowthYoy !== null
@@ -91,11 +97,13 @@ export default function FinancialHealth({ data }: { data: Financials }) {
         <MetricTile
           label="EBITDA"
           tooltip="Earnings Before Interest, Taxes, Depreciation & Amortization. A measure of core operating profitability — positive EBITDA means the business generates real cash."
+          source="Yahoo Finance"
           value={fmt(data.ebitda, "currency")}
         />
         <MetricTile
           label="P/E Ratio"
           tooltip="Price-to-Earnings ratio — how much investors pay per dollar of earnings. High P/E can mean growth expectations; N/A often means the company is unprofitable."
+          source="Yahoo Finance"
           value={data.peRatio !== null ? data.peRatio.toFixed(1) : "N/A"}
         />
       </div>
@@ -104,23 +112,27 @@ export default function FinancialHealth({ data }: { data: Financials }) {
         <MetricTile
           label="Gross Margin"
           tooltip="Revenue minus cost of goods sold, as a % of revenue. Shows how efficiently the company produces its product before overhead."
+          source="Yahoo Finance / SEC EDGAR"
           value={fmt(data.grossMargin, "percent")}
           highlight={data.grossMargin !== null ? (data.grossMargin > 0.3 ? "good" : "neutral") : undefined}
         />
         <MetricTile
           label="Operating Margin"
           tooltip="Operating income as a % of revenue — what's left after paying all operating costs. Above 10% is healthy; negative means the company is burning money to operate."
+          source="Yahoo Finance / SEC EDGAR"
           value={fmt(data.operatingMargin, "percent")}
           highlight={marginHighlight}
         />
         <MetricTile
           label="Cash"
           tooltip="Cash and short-term investments on hand. Companies with strong cash positions are more likely to invest in new software and infrastructure."
+          source="Yahoo Finance / SEC EDGAR"
           value={fmt(data.cash, "currency")}
         />
         <MetricTile
           label="Total Debt"
           tooltip="Long-term debt obligations. High debt relative to cash can constrain capital spending — including software purchases."
+          source="Yahoo Finance / SEC EDGAR"
           value={fmt(data.totalDebt, "currency")}
           highlight={
             data.totalDebt !== null && data.totalDebt > (data.cash ?? 0) * 3 ? "bad" : undefined
@@ -134,6 +146,7 @@ export default function FinancialHealth({ data }: { data: Financials }) {
             <div className="text-xs text-gray-400 uppercase tracking-wider mb-1 flex items-center">
               R&D Investment
               <Tooltip text="Annual Research & Development spend. High R&D intensity (>8% of revenue) signals strong demand for engineering tools like PLM, simulation, and CAD — Siemens DIS's core market." />
+              <Citation source="Yahoo Finance / SEC EDGAR XBRL" />
             </div>
             <div className={`text-2xl font-bold ${rdHighlight === "good" ? "text-emerald-400" : rdHighlight === "bad" ? "text-red-400" : "text-[#00BEDC]"}`}>
               {fmt(data.rdSpend, "currency")}
@@ -153,6 +166,7 @@ export default function FinancialHealth({ data }: { data: Financials }) {
           <div className="text-xs text-gray-400 uppercase tracking-wider mb-3 flex items-center">
             Revenue History
             <Tooltip text="Annual revenue over the past 4 fiscal years, oldest to newest (left to right). Hover a bar to see the exact value." />
+            <Citation source="Yahoo Finance / SEC EDGAR XBRL" />
           </div>
           <div className="flex items-end gap-2">
             {data.revenueHistory

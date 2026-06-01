@@ -1,5 +1,6 @@
 "use client";
 import type { NewsItem } from "@/types/company";
+import Citation from "@/components/Citation";
 
 export default function NewsSection({ items }: { items: NewsItem[] }) {
   if (items.length === 0) return null;
@@ -9,6 +10,7 @@ export default function NewsSection({ items }: { items: NewsItem[] }) {
       <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
         <span className="w-2 h-2 rounded-full bg-[#00BEDC]" />
         Recent News
+        <Citation source="Google News RSS" />
       </h3>
       <div className="space-y-3">
         {items.map((item, i) => {
