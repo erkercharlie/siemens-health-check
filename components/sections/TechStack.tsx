@@ -1,5 +1,6 @@
 "use client";
 import type { TechSignals } from "@/types/company";
+import Tooltip from "@/components/Tooltip";
 
 export default function TechStackSection({ data }: { data: TechSignals }) {
   if (
@@ -19,7 +20,10 @@ export default function TechStackSection({ data }: { data: TechSignals }) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {data.detectedTech.length > 0 && (
           <div>
-            <div className="text-xs text-gray-400 uppercase tracking-wider mb-2">Detected on Website</div>
+            <div className="text-xs text-gray-400 uppercase tracking-wider mb-2 flex items-center">
+              Detected on Website
+              <Tooltip text="Technologies and platforms identified by scanning the company's public website source code — cloud providers, CRM, ERP, analytics, and marketing tools." />
+            </div>
             <div className="flex flex-wrap gap-2">
               {data.detectedTech.map((t) => (
                 <span key={t} className="text-xs bg-[#00BEDC]/20 text-[#00BEDC] px-2 py-1 rounded-full">
@@ -31,7 +35,10 @@ export default function TechStackSection({ data }: { data: TechSignals }) {
         )}
         {data.digitalKeywords.length > 0 && (
           <div>
-            <div className="text-xs text-gray-400 uppercase tracking-wider mb-2">Filing Keywords</div>
+            <div className="text-xs text-gray-400 uppercase tracking-wider mb-2 flex items-center">
+              Filing Keywords
+              <Tooltip text="Digital manufacturing terms found in the company's most recent SEC 10-K annual report. These signal how digitally mature the company is and what technologies they're already discussing internally." />
+            </div>
             <div className="flex flex-wrap gap-2">
               {data.digitalKeywords.map((k) => (
                 <span key={k} className="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded-full">
@@ -43,7 +50,10 @@ export default function TechStackSection({ data }: { data: TechSignals }) {
         )}
         {data.competitorSoftware.length > 0 && (
           <div>
-            <div className="text-xs text-gray-400 uppercase tracking-wider mb-2">Competitor Software</div>
+            <div className="text-xs text-gray-400 uppercase tracking-wider mb-2 flex items-center">
+              Competitor Software
+              <Tooltip text="PLM, CAD, or engineering software platforms mentioned in SEC filings that compete directly with Siemens DIS products. These indicate existing tooling that would need to be displaced or integrated." />
+            </div>
             <div className="flex flex-wrap gap-2">
               {data.competitorSoftware.map((c) => (
                 <span key={c} className="text-xs bg-amber-500/20 text-amber-400 px-2 py-1 rounded-full">
